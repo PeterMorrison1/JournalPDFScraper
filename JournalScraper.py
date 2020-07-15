@@ -2,6 +2,7 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from Scrapers.Base import Base
 from Scrapers.ElsevierScraper import ElsevierScraper
+from Scrapers.ScienceDirectScraper import ScienceDirectScraper
 
 class JournalScraper():
 
@@ -14,6 +15,7 @@ class JournalScraper():
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
         self.selenium_driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+        # self.selenium_driver = webdriver.Chrome(executable_path="chromedriver.exe", options=options)
         
     def __end__(self):
         """Shuts down the selenium driver, ending the browser instance.
@@ -22,7 +24,7 @@ class JournalScraper():
         
     def __get_scrapers__(self):
         print(Base.__subclasses__())
-        return [ElsevierScraper(self.selenium_driver)]
+        return [ElsevierScraper(self.selenium_driver), ScienceDirectScraper(self.selenium_driver)]
         # TODO: Try to dynamically get all rather than hard code scrapers: return [obj() for obj in Base.__subclasses__()]
     
     def __find_correct_scraper__(self, url):
@@ -31,6 +33,12 @@ class JournalScraper():
                 return scraper
         
         return None
+    
+    def clear_instance(self):
+        while len(self.selenium_driver.window_handles) > 1:
+            self.selenium_driver.switch_to.window(self.selenium_driver.window_handles[-1])
+            self.selenium_driver.close()
+        self.selenium_driver.switch_to.window(self.selenium_driver.window_handles[0])
     
     def scrape_article(self, url):
         """Finds the url of the pdf if it is open access and exists

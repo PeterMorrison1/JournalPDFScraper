@@ -1,8 +1,7 @@
 from selenium.webdriver.common.keys import Keys
 from Scrapers.Base import Base
 
-
-class ElsevierScraper(Base):
+class ScienceDirectScraper(Base):
     
     def __init__(self, driver):
         super().__init__(driver)
@@ -13,12 +12,15 @@ class ElsevierScraper(Base):
         Returns:
             element: None if no element found / timeout or return driver element
         """
-        #TODO: Determine if this should be changed to base depending on use in other scrapers
-        elements = super().__find_elements_by_class__("article-tools__item__pdf")
+        elements = super().__find_elements_by_id__("pdfLink")
         if len(elements) == 0:
             return None
         else:
-            return elements[0]
+            element = super().__click_element_wait_for_new_element__(elements[0].get_attribute("id"), "a.link-button-primary:nth-child(1)")
+            return element
+
+    def __get_download_url__(self):
+        url = self.selenium_driver.find
     
     def can_parse_url(self, url):
         """Determines if the url can be parsed by the specific scraper
@@ -48,10 +50,12 @@ class ElsevierScraper(Base):
             String: None if the article is pay-walled or if the url is invalid or if the scraper is outdated, otherwise return pdf url
         """
         super().__launch_journal_page__(url)
-
+        
         element = self.__get_article_button_element__()
         if element is not None:
-            return super().__click_element__(element)
+            super().__click_element__(element)
+            pdf_url = super().__get_href_value__("save-pdf-icon-button")
+            return pdf_url
         else:
             return None
     

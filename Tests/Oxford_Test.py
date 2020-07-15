@@ -1,17 +1,17 @@
 from unittest import TestCase
 from pprint import pprint
-from Scrapers.ScienceDirectScraper import ScienceDirectScraper
+from Scrapers.OxfordScraper import OxfordScraper
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
-class ScienceDirect_Test(TestCase):
+class Oxford_Test(TestCase):
     
     @classmethod
     def setUpClass(cls):
         options = webdriver.ChromeOptions()
         options.add_argument("--start-maximized")
         cls.selenium_driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
-        cls.scraper = ScienceDirectScraper(cls.selenium_driver)
+        cls.scraper = OxfordScraper(cls.selenium_driver)
         
     @classmethod
     def tearDownClass(cls):
@@ -20,16 +20,16 @@ class ScienceDirect_Test(TestCase):
         
     def test_open_access_article_should_pass(self):
         scraper = self.scraper
-        url = "https://www.sciencedirect.com/science/article/pii/S0022460X20300754"
+        url = "https://academic.oup.com/jcag/article/2/Supplement_1/S73/5099120"
         
-        expected = "https://www.sciencedirect.com/science/article/pii/S0022460X20300754/pdfft?isDTMRedir=true&download=true"
+        expected = "https://watermark.silverchair.com/gwy053.pdf"
         actual = scraper.find_pdf_url(url)
         
-        self.assertTrue(actual == expected, "Article pdf url was not found. Actual: " + str(actual))
+        self.assertTrue(actual.split("?")[0] == expected, "Article pdf url was not found. Actual: " + str(actual))
         
     def test_closed_access_article_should_fail(self):
         scraper = self.scraper
-        url = "https://www.sciencedirect.com/science/article/abs/pii/S0022460X20300651"
+        url = "https://academic.oup.com/jat/article-abstract/doi/10.1093/jat/bkaa070/5856455?redirectedFrom=fulltext"
         
         expected = None
         actual = scraper.find_pdf_url(url)

@@ -25,20 +25,18 @@ class Base(ABC):
             self.selenium_driver.get(url)
     
     def __find_elements_by_id__(self, id_name):
-        #TODO: Keeping this for possible efficiency improvement: return WebDriverWait(self.selenium_driver, self.delay)
-        #   .until(EC.presence_of_all_elements_located(self.selenium_driver.find_elements_by_id(id_name)))
         try:
-            elements = self.selenium_driver.find_elements_by_id(id_name)
+            elements = WebDriverWait(self.selenium_driver, self.delay).until(EC.presence_of_all_elements_located((By.ID, id_name)))
             return elements
         except TimeoutException:
-            return None
+            return []
 
     def __find_elements_by_class__(self, class_name):
         try:
-            elements = self.selenium_driver.find_elements_by_class_name(class_name)
+            elements = WebDriverWait(self.selenium_driver, self.delay).until(EC.presence_of_all_elements_located((By.CLASS_NAME, class_name)))
             return elements
         except TimeoutException:
-            return None
+            return []
 
     def __click_button_wait_until_clickable_id__(self, element_id_name):
         WebDriverWait(self.selenium_driver, self.delay).until(EC.element_to_be_clickable((By.ID, element_id_name))).click()

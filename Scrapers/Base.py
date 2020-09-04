@@ -30,6 +30,13 @@ class Base(ABC):
             return elements
         except TimeoutException:
             return []
+        
+    def __find_elements_by_selector__(self, id_name):
+        try:
+            elements = WebDriverWait(self.selenium_driver, self.delay).until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, id_name)))
+            return elements
+        except TimeoutException:
+            return []
 
     def __find_elements_by_class__(self, class_name):
         try:
@@ -43,6 +50,9 @@ class Base(ABC):
 
     def __click_button_wait_until_clickable_class__(self, element_class_name):
         WebDriverWait(self.selenium_driver, self.delay).until(EC.element_to_be_clickable((By.CLASS_NAME, element_class_name))).click()
+        
+    def __click_button_wait_until_clickable_selector__(self, element_class_name):
+        WebDriverWait(self.selenium_driver, self.delay).until(EC.element_to_be_clickable((By.CSS_SELECTOR, element_class_name))).click()
 
     def __click_element__(self, element):
         """This will click the passed element, and if doing so opens a new tab, it will open the tab and check the new url
@@ -80,6 +90,27 @@ class Base(ABC):
             string: If timeout then return None, otherwise return the pdf url
         """
         self.__click_button_wait_until_clickable_id__(element_1_id_name)
+
+        # Wait until the new element appears
+        new_element = WebDriverWait(self.selenium_driver, self.delay).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, element_2_css_selector))
+        )
+        if new_element is not None:
+            return new_element
+        else:
+            return None
+        
+    def __click_element_wait_for_new_element_selectors__(self, element_1_css_selector, element_2_css_selector):
+        """This will click the passed element_1 then wait for element_2 to appear, then return that element
+
+        Args:
+            element_1_id_name (string): first element being clicked as a css selector
+            element_2_css_selector (string): second element being clicked as a css selector
+
+        Returns:
+            string: If timeout then return None, otherwise return the pdf url
+        """
+        self.__click_button_wait_until_clickable_selector__(element_1_css_selector)
 
         # Wait until the new element appears
         new_element = WebDriverWait(self.selenium_driver, self.delay).until(

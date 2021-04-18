@@ -18,7 +18,7 @@ class ScienceDirect_Test(TestCase):
         cls.selenium_driver.quit()
 
         
-    def test_open_access_article_should_pass(self):
+    def test_pdf_open_access_article_should_pass(self):
         scraper = self.scraper
         url = "https://www.sciencedirect.com/science/article/pii/S0022460X20300754"
         
@@ -27,7 +27,7 @@ class ScienceDirect_Test(TestCase):
         
         self.assertTrue(actual == expected, "Article pdf url was not found. Actual: " + str(actual))
         
-    def test_closed_access_article_should_fail(self):
+    def test_pdf_closed_access_article_should_fail(self):
         scraper = self.scraper
         url = "https://www.sciencedirect.com/science/article/abs/pii/S0022460X20300651"
         
@@ -36,7 +36,7 @@ class ScienceDirect_Test(TestCase):
 
         self.assertTrue(actual is None, "Article pdf url was found (either now free or wrong url found) actual: " + str(actual))
         
-    def test_wrong_journal_should_fail(self):
+    def test_pdf_wrong_journal_should_fail(self):
         scraper = self.scraper
         url = "https://www.gastrojournal.org/article/S0016-5085(18)35206-5/fulltext"
         
@@ -44,3 +44,29 @@ class ScienceDirect_Test(TestCase):
         actual = scraper.find_pdf_url(url)
 
         self.assertTrue(actual is None, "Article pdf url was found, actual: " + str(actual))
+    
+    
+    def test_url_open_access_article_should_pass(self):
+        scraper = self.scraper
+        url = "https://www.sciencedirect.com/science/article/pii/S0022460X20300754"
+        
+        actual = scraper.find_journal_url(url)
+        
+        self.assertTrue(actual == url, "Article pdf url was not found. Actual: " + str(actual))
+        
+    def test_url_closed_access_article_should_fail(self):
+        scraper = self.scraper
+        url = "https://www.sciencedirect.com/science/article/abs/pii/S0022460X20300651"
+        
+        actual = scraper.find_journal_url(url)
+
+        self.assertTrue(actual is None, "Article pdf url was found (either now free or wrong url found) actual: " + str(actual))
+        
+    def test_url_wrong_journal_should_fail(self):
+        scraper = self.scraper
+        url = "https://www.gastrojournal.org/article/S0016-5085(18)35206-5/fulltext"
+        
+        actual = scraper.find_journal_url(url)
+
+        self.assertTrue(actual is None, "Article pdf url was found, actual: " + str(actual))
+        

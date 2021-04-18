@@ -1,6 +1,5 @@
 from selenium.webdriver.common.keys import Keys
-from Scrapers.Base import Base
-
+from journal_scrapers.Base import Base
 
 class ElsevierScraper(Base):
     
@@ -14,6 +13,7 @@ class ElsevierScraper(Base):
             element: None if no element found / timeout or return driver element
         """
         #TODO: Determine if this should be changed to base depending on use in other scrapers
+        # super().__click_button_wait_until_clickable_id__('onetrust-accept-btn-handler')
         elements = super().__find_elements_by_class__("article-tools__item__pdf")
         if len(elements) == 0:
             return None
@@ -54,4 +54,20 @@ class ElsevierScraper(Base):
             return super().__click_element__(element)
         else:
             return None
-    
+
+    def find_journal_url(self, url):
+        """Will find the free journal url and return it. Otherwise returns None. This is different than the pdf as it does not send the PDF page, only check if it is free.
+
+        Args:
+            url (string): the url of the journal page
+
+        Returns:
+            String: None if the article is pay-walled or if the url is invalid or if the scraper is outdated, otherwise return pdf url
+        """
+        super().__launch_journal_page__(url)
+
+        element = self.__get_article_button_element__()
+        if element is not None:
+            return self.selenium_driver.current_url
+        else:
+            return None

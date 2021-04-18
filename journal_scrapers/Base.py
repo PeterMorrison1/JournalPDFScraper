@@ -7,7 +7,7 @@ from selenium import webdriver
 import time
 
 class Base(ABC):
-    delay = 5
+    delay = 10
     
     def __init__(self, selenium_driver):
         self.selenium_driver = selenium_driver
@@ -17,13 +17,20 @@ class Base(ABC):
         pass
     
     @abstractmethod
+    def find_journal_url(self, url):
+        pass
+    
+    @abstractmethod
     def can_parse_url(self, url):
         pass
 
     def __launch_journal_page__(self, url):
         if self.selenium_driver.current_url is not url:
             self.selenium_driver.get(url)
-    
+            # WebDriverWait(self.selenium_driver, self.delay).until(EC.presence_of_element_located((By.PARTIAL_LINK_TEXT, 'cookie'))).click()
+            # element = self.selenium_driver.driver.find_elements_by_xpath("//*[contains(text(), 'Cookie')]")
+            # element = self.selenium_driver.find_element_by_partial_link_text('cookie')
+            
     def __find_elements_by_id__(self, id_name):
         try:
             elements = WebDriverWait(self.selenium_driver, self.delay).until(EC.presence_of_all_elements_located((By.ID, id_name)))

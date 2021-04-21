@@ -1,0 +1,1 @@
+from journalpdfscraper import JournalScraper, OxfordScraper, BMJSoupScraper, ElsevierScraper, ScienceDirectScraper

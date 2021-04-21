@@ -1,5 +1,5 @@
 from selenium.webdriver.common.keys import Keys
-from journal_scrapers.BaseSoup import BaseSoup
+from journalpdfscraper.BaseSoup import BaseSoup
 
 
 class BMJSoupScraper(BaseSoup):

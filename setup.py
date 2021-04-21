@@ -5,7 +5,7 @@ with open("README.md", "r", encoding='utf-8') as f:
 
 setup(
     name='journalpdfscraper', 
-    version='0.1.15',
+    version='0.2.1',
     author='PeterMorrison1',
     description='A project to check if articles are free or paid',
     long_description=long_description, 

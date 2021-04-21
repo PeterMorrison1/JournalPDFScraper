@@ -1,8 +1,7 @@
 from selenium.webdriver.common.keys import Keys
-from journal_scrapers.Base import Base
+from journalpdfscraper.Base import Base
 
-
-class OxfordScraper(Base):
+class ElsevierScraper(Base):
     
     def __init__(self, driver):
         super().__init__(driver)
@@ -13,7 +12,9 @@ class OxfordScraper(Base):
         Returns:
             element: None if no element found / timeout or return driver element
         """
-        elements = super().__find_elements_by_class__("article-pdfLink")
+        #TODO: Determine if this should be changed to base depending on use in other scrapers
+        # super().__click_button_wait_until_clickable_id__('onetrust-accept-btn-handler')
+        elements = super().__find_elements_by_class__("article-tools__item__pdf")
         if len(elements) == 0:
             return None
         else:
@@ -53,7 +54,7 @@ class OxfordScraper(Base):
             return super().__click_element__(element)
         else:
             return None
-    
+
     def find_journal_url(self, url):
         """Will find the free journal url and return it. Otherwise returns None. This is different than the pdf as it does not send the PDF page, only check if it is free.
 
@@ -69,7 +70,4 @@ class OxfordScraper(Base):
         if element is not None:
             return self.selenium_driver.current_url
         else:
-            if super().__find_elements_by_class__("captcha") is not None:
-                return 'captcha'
-            else:
-                return None
+            return None

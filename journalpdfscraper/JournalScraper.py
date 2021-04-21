@@ -1,10 +1,10 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from journal_scrapers.Base import Base
-from journal_scrapers.ElsevierScraper import ElsevierScraper
-from journal_scrapers.ScienceDirectScraper import ScienceDirectScraper
-from journal_scrapers.BMJSoupScraper import BMJSoupScraper
-from journal_scrapers.OxfordScraper import OxfordScraper
+from journalpdfscraper.Base import Base
+from journalpdfscraper.ElsevierScraper import ElsevierScraper
+from journalpdfscraper.ScienceDirectScraper import ScienceDirectScraper
+from journalpdfscraper.BMJSoupScraper import BMJSoupScraper
+from journalpdfscraper.OxfordScraper import OxfordScraper
 import os
 
 class JournalScraper():
